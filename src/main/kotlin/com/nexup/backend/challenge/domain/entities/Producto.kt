@@ -1,4 +1,4 @@
-package com.nexup.backend.challenge.domain.entity
+package com.nexup.backend.challenge.domain.entities
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -9,6 +9,7 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "producto")
+
 class Producto(
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,4 @@ class Producto(
     @Column(name = "precio", nullable = false)
     var precio: Double = 0.0,
 
-) {
-
-}
+)

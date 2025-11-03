@@ -1,4 +1,4 @@
-package com.nexup.backend.challenge.domain.entity
+package com.nexup.backend.challenge.domain.entities
 
 import jakarta.persistence.*
 import java.time.DayOfWeek
@@ -33,5 +33,4 @@ class Supermercado(
     @Column(name = "dia", nullable = false)
     @Enumerated(EnumType.STRING)
     val diasAbiertos: MutableSet<DayOfWeek> = mutableSetOf()
-
 )

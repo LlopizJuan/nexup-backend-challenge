@@ -1,6 +1,5 @@
-package com.nexup.backend.challenge.domain.entity
+package com.nexup.backend.challenge.domain.entities
 
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -28,5 +27,4 @@ class Stock (
 
     @Column(nullable = false)
     var cantidad: Int,
-) {
-}
+)
