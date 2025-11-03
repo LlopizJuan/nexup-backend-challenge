@@ -105,6 +105,7 @@ ar.com.nexup.backend.challenge
 └── test                          # Pruebas con JUnit y MockMvc
 ```
 
+Se creó la entidad Venta para aplicar el principio de Responsabilidad Única (SRP), separando la lógica de registro de transacciones del manejo de supermercado, productos y stock.
 ---
 
 ## Enfoque Utilizado
