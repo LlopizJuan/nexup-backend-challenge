@@ -1,78 +1,140 @@
-# Nexup Backend Challenge
 
-En este repositorio, se encuentra la prueba técnica para el puesto de Backend Developer en Nexup.
+## Descripción
 
-Este challenge está diseñado para evaluar tus habilidades de Kotlin y resolución de problemas.
+La aplicación está desarrollada en **Kotlin**, utilizando **Spring Boot** para la creación de servicios REST, con **JPA/Hibernate** para la persistencia y una **base de datos H2 en memoria** .
 
-## Problema a resolver
+---
 
-Crear las clases y funciones necesarias para resolver el siguiente problema:
-- Se tiene una **cadena de supermercados**
-- Se tienen **productos**, cada uno con un ID único, nombre y precio
-- Se tienen **supermercados**, cada uno con un ID único, nombre, un listado de productos y el stock asociado a cada uno (el stock puede variar entre los distintos supermercados)
-    - Los supermercados comparten los distintos productos
+## Funcionalidades Requeridas
 
-- Funcionalidades requeridas para cada _supermercado_:
-  - Registrar una venta de un producto
-    - Dado un ID de producto y una cantidad a vender, se debe registrar la venta de un producto
-    - La función debe retornar el precio total de la venta
-  - Obtener la cantidad vendida de un producto
-    - Dado un ID de producto, retornar la cantidad vendida de dicho producto
-  - Obtener ingresos por ventas de un producto
-    - Dado un ID de producto, retornar el dinero obtenido de las ventas de dicho producto
-  - Obtener ingresos totales
-    - Retornar el dinero total obtenido de todas las ventas realizadas
+### Supermercado
 
-- Funcionalidades requeridas para la _cadena de supermercados_:
-  - Obtener los 5 productos más vendidos
-    - Buscar los 5 productos más vendidos en toda la cadena  
-    - Retornar un _string_ con el formato `<nombre_producto>: cantidad_vendida`, concatenados con un guión
-  - Obtener ingresos totales
-    - Retornar el dinero total obtenido de todas las ventas realizadas en toda la cadena
-  - Obtener el supermercado con mayor cantidad de ingresos por ventas
-    - Retornar un _string_ con el formato `<nombre_supermercado> (<id>). Ingresos totales: <ingresos>`
- 
-Para cada una de las funcionalidades planteadas:
-- Definir los nombres de las funciones, parámetros y demás datos cómo consideres adecuado
-- Documentar y comentar el código dónde consideres necesario
-- Manejar todos los casos de error que consideres necesarios
-- Agregar todos los tests que consideres necesarios
+- **Registrar una venta de producto**  
+  Permite registrar la venta de un producto específico, actualizando el stock disponible y registrando el monto total de la venta.
 
-### Objetivo opcional
+- **Obtener cantidad vendida de un producto**  
+  Devuelve la cantidad total de unidades vendidas de un producto en un supermercado determinado.
 
-Se desea manejar para cada supermercado su hora de apertura y cierre, así cómo los días donde se encuentra abierto. Agregar los datos necesarios para manejar dicha información.
+- **Obtener ingresos por producto**  
+  Devuelve el total de ingresos generados por la venta de un producto en un supermercado.
 
-Sobre la cadena de supermercados, agregar una funcionalidad que, dado un cierto día y horario, se pueda obtener la lista de supermercados abiertos en ese momento.
-Se espera obtener la respuesta como un _string_ con el formato `<nombre_supermercado> (<id>)`, y se concatenen con una coma.
+- **Obtener ingresos totales del supermercado**  
+  Devuelve el monto total de ingresos generados por todas las ventas realizadas en un supermercado.
 
+### Cadena de Supermercados
 
-## Pasos a seguir:
-1. Clone este repositorio en su máquina local usando Git.
-   ```bash
-   git clone https://gitlab.com/nexup/nexup-backend-challenge.git
+- **Obtener los 5 productos más vendidos**  
+  Devuelve una lista con los cinco productos más vendidos considerando todas las sucursales.
+
+- **Obtener ingresos totales de la cadena**  
+  Devuelve el total de ingresos combinados de todos los supermercados.
+
+- **Obtener el supermercado con mayores ingresos**  
+  Devuelve el supermercado con el mayor monto total de ingresos, incluyendo su nombre, ID y valor acumulado.
+
+### Opcional
+
+- **Supermercados abiertos según horario**  
+  Dado un día y hora, devuelve una lista con los supermercados que se encuentran abiertos en ese momento.
+
+---
+
+## Servicios REST
+
+### SupermercadoController
+| Método | Endpoint | Descripción |
+|--------|-----------|-------------|
+| `POST` | `/api/supermercados/{id}/ventas` | Registra la venta de un producto en un supermercado. Recibe un body JSON con `productoId` y `cantidad`. |
+| `GET` | `/api/supermercados/{id}/productos/{productoId}/cantidad-vendida` | Devuelve la cantidad vendida de un producto. |
+| `GET` | `/api/supermercados/{id}/productos/{productoId}/ingresos` | Devuelve los ingresos generados por la venta de un producto. |
+| `GET` | `/api/supermercados/{id}/ingresos` | Devuelve el total de ingresos del supermercado. |
+
+### CadenaController
+| Método | Endpoint | Descripción |
+|--------|-----------|-------------|
+| `GET` | `/api/cadena/top5-productos` | Devuelve los 5 productos más vendidos de toda la cadena. |
+| `GET` | `/api/cadena/ingresos` | Devuelve el total de ingresos de toda la cadena. |
+| `GET` | `/api/cadena/mejor-supermercado` | Devuelve el supermercado con mayores ingresos. |
+| `GET` | `/api/cadena/abiertos?dia={DIA}&hora={HORA}` | Devuelve los supermercados abiertos en el momento indicado. |
+
+---
+
+## Tecnologías Utilizadas
+
+- **Kotlin** – Lenguaje principal.
+- **Spring Boot 3.5.x** – Framework para construir la API REST.
+- **Spring Data JPA / Hibernate** – Capa de persistencia y manejo de entidades.
+- **H2 Database** – Base de datos en memoria para desarrollo y testing.
+- **JUnit 5 + MockMvc** – Pruebas integrales de los controladores.
+- **Gradle** – Herramienta de construcción y gestión de dependencias.
+
+--- 
+
+## Arquitectura del Proyecto
+
+El proyecto sigue un **enfoque Clean Architecture**, separando las responsabilidades por capas:
+
+```
+ar.com.nexup.backend.challenge
+│
+├── api.rest.controller          # Controladores REST
+│   ├── SupermercadoController
+│   └── CadenaController
+│
+├── domain.entities              # Entidades del dominio
+│   ├── Producto
+│   ├── Supermercado
+│   ├── Stock
+│   └── Venta
+│
+├── domain.exception             # Excepciones personalizadas
+│   ├── SupermercadoNotFoundException
+│   ├── ProductoNotFoundException
+│   ├── ProductoNoDisponibleException
+│   └── StockInsuficienteException
+│
+├── infrastructure.repository     # Repositorios JPA
+│   ├── SupermercadoRepository
+│   ├── ProductoRepository
+│   ├── StockRepository
+│   └── VentaRepository
+│
+├── service                       # Lógica de negocio
+│   └── SupermercadoService, CadenaService
+│
+└── test                          # Pruebas con JUnit y MockMvc
+```
+
+---
+
+## Enfoque Utilizado
+
+1. **Diseño de la lógica de negocio**  
+   Cada servicio encapsula la lógica específica del dominio.  
+   Por ejemplo, `SupermercadoService` maneja las ventas, actualiza el stock y calcula ingresos; mientras que `CadenaService` consolida la información global de todos los supermercados.
+
+2. **Simulación de base de datos**  
+   Se utiliza una base H2 en memoria con datos cargados en `@BeforeEach` para ejecutar las pruebas sin requerir una base externa.
+
+3. **Validación y manejo de errores**  
+   Antes de ejecutar cualquier operación, se valida la existencia de los recursos.  
+   En caso contrario, se lanzan excepciones personalizadas manejadas por un `@ControllerAdvice` que traduce los errores en respuestas HTTP adecuadas (404, 400, 500).
+
+4. **Testing aislado**  
+   Cada test reinicia el contexto con:
+   ```kotlin
+   @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
    ```
-2. Crea un repositorio vacío en tu cuenta de GitHub con el mismo nombre de este.
-   ```bash
-    nexup-backend-challenge
-   ```
-3. Muevesé a la carpeta del proyecto.
-   ```bash
-   cd ./nexup-backend-challenge
-   ```
-4. Cambia la URL remota del repositorio clonado de GitHub, por la URL de tu repositorio.
-   ```bash
-   git remote set-url origin <tu-repositorio.git>
-   ```
-5. Sube el código a tu repositorio.
+   Esto asegura una base limpia por test y resultados.
 
-## Recomendaciones
-- **No** hagas un _fork_ de este repositorio.
-- **No** hagas _push_ directamente a este repositorio.
-- Crea un commit por cada cambio que realices. Utiliza mensajes **claros** y **descriptivos** para documentar tu proceso.
-- No es necesario el uso de base de datos ni archivos para manejar los datos de prueba. Podes utilizar estructuras de datos en memoria.
-- Dentro del proyecto se encuentra un archivo de ejemplo para ejecución de las pruebas, modificarlo como sea necesario para adaptarlo al problema.
-  - En el archivo de pruebas se encuentra un ejemplo de datos a usar en la ejecución de los Tests
+---
 
-## Entregables
-- Un enlace a un repositorio de GitHub con el código resolviendo el problema planteado.
-- Opcional: Un archivo README con explicaciones sobre el enfoque utilizado y cualquier otra información relevante.
+## Test
+
+Los tests utilizan MockMvc para invocar los endpoints y validar:
+- Códigos de estado HTTP.
+- Cuerpos de respuesta.
+- Mensajes de error definidos en las excepciones.
+
+---
+
